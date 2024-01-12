@@ -1,5 +1,5 @@
 ---
-name: Build and Push Node Image to AWS ECR
+name: Build and Push Node To App Engine
 on:
   push:
     branches: [main]
@@ -10,29 +10,14 @@ permissions:
 
 jobs:
   build-and-push:
-    name: Build and Push to ECR
+    name: Build and Push to GCP App Engine
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
+      - id: "auth"
+        uses: "google-github-actions/auth@v2"
         with:
-          role-to-assume: arn:aws:iam::767397746646:role/GithubActionsRole
-          role-session-name: GitHub_to_AWS_via_FederatedOIDC
-          aws-region: us-east-2
+          json_credentials: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY_JSON }}
+          service_account: "halocare-test@appspot.gserviceaccount.com"
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-
-      - name: Build, Tag, and Push the Image to Amazon ECR
-        id: build-image
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ts-node-express
-          IMAGE_TAG: latest
-        run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+      - id: "deploy"
+        uses: "google-github-actions/deploy-appengine@v2"
