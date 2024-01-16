@@ -29,13 +29,6 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY_JSON }}
           service_account: "halocare-test@appspot.gserviceaccount.com"
-
-      - name: Print Current Path
-        run: pwd
-
-      - name: List Files in Directory
-        run: ls
-
       - id: "deploy"
         uses: "google-github-actions/deploy-appengine@v2"
         with:
