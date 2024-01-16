@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 permissions:
-  id-token: write # This is required for requesting the JWT
+  id-token: write # This is required for requesting the JWT google-github-actions/auth@v2
   contents: read # This is required for checking out the repository
 
 jobs:
@@ -28,9 +28,9 @@ jobs:
         uses: "google-github-actions/auth@v2"
         with:
           credentials_json: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY_JSON }}
-          service_account: "halocare-test@appspot.gserviceaccount.com"
+          service_account: ${{ vars.GCLOUD_SERVICE_ACCOUNT }}
       - id: "deploy"
         uses: "google-github-actions/deploy-appengine@v2"
         with:
           deliverables: app.yaml
-          project_id: halocare-test
+          project_id: ${{ vars.GCLOUD_PROJECT_ID }}
