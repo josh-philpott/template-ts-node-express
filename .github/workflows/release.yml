@@ -39,11 +39,8 @@ jobs:
       - name: prune dev dependencies
         run: npm prune --omit=dev
 
-      - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
-
       - name: "📂 production artifacts"
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: build
           path: release.zip
@@ -54,18 +51,18 @@ jobs:
       - build
     steps:
       - name: "📂 download build artifacts"
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: build
-          path: ./release.zip
+      - run: |
+          ls -al
 
       - id: "auth"
         uses: "google-github-actions/auth@v2"
         with:
           credentials_json: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY_JSON }}
           service_account: ${{ vars.GCLOUD_SERVICE_ACCOUNT }}
-      - run: |
-          ls -al
+
       - id: "deploy"
         uses: "google-github-actions/deploy-appengine@v2"
         with:
