@@ -49,5 +49,6 @@ jobs:
       - id: "deploy"
         uses: "google-github-actions/deploy-appengine@v2"
         with:
+          working_directory: ${{ env.ARTIFACT_NAME }}
           deliverables: app.yaml
           project_id: ${{ vars.GCLOUD_PROJECT_ID }}
