@@ -1,44 +1,36 @@
 ---
-name: ⬆️ Release
+name: ⬆️ Build and Deploy to App Engine
 
 on:
-  push:
-    tags: ["release/[0-9]+.[0-9]+.[0-9]+"]
+  workflow_call:
+    inputs:
+      artifact-id:
+        required: false
+        type: string
+      gcp-version:
+        required: true
+        type: string
 
 permissions:
   id-token: write # This is required for requesting the JWT google-github-actions/auth@v2
   contents: read # This is required for checking out the repository
 
 jobs:
-  set-artifact-name:
-    name: 🤔 Set Artifact Name
-    runs-on: ubuntu-latest
-    outputs:
-      artifact-name: ${{ steps.set-artifact-name.outputs.ARTIFACT_NAME }}
-    steps:
-      - name: Set Artifact Name
-        id: set-artifact-name
-        run: |
-          TAG=${{ github.ref_name }} 
-          echo "ARTIFACT_NAME=${TAG////-}" >> "$GITHUB_OUTPUT"
   build:
     name: 🏗️ Build
-    needs:
-      - set-artifact-name
     uses: ./.github/workflows/build.yml
     with:
-      artifact-id: ${{needs.set-artifact-name.outputs.artifact-name}}
+      artifact-id: ${{ inputs.artifact-id }}
   deploy:
     name: ⬆️ Deploy
     runs-on: ubuntu-latest
     needs:
-      - set-artifact-name
       - build
     steps:
       - name: 📂 Download Build Artifacts
         uses: actions/download-artifact@v4
         with:
-          name: ${{needs.set-artifact-name.outputs.artifact-name}}
+          name: ${{ inputs.artifact-id }}
 
       - name: 🛡️ Authenticate with Google Cloud
         id: "auth"
@@ -53,3 +45,4 @@ jobs:
         with:
           deliverables: app.yaml
           project_id: ${{ vars.GCLOUD_PROJECT_ID }}
+          version: ${{ inputs.gcp-version }}

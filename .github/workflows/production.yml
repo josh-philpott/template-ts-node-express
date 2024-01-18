@@ -1,0 +1,31 @@
+---
+name: ⬆️ Release to Production
+
+on:
+  push:
+    tags: ["release/[0-9]+.[0-9]+.[0-9]+"]
+  workflow_call:
+    inputs:
+      artifact-id:
+        required: false
+        type: string
+
+jobs:
+  set-artifact-name:
+    name: 🤔 Set Artifact Name
+    runs-on: ubuntu-latest
+    outputs:
+      artifact-name: ${{ steps.set-artifact-name.outputs.ARTIFACT_NAME }}
+    steps:
+      - name: Set Artifact Name
+        id: set-artifact-name
+        run: |
+          TAG=${{ github.ref_name }} 
+          echo "ARTIFACT_NAME=${TAG////-}" >> "$GITHUB_OUTPUT"
+  build-and-deploy:
+    uses: ./.github/workflows/build-and-deploy-app-engine.yml
+    needs:
+      - set-artifact-name
+    with:
+      artifact-id: ${{needs.set-artifact-name.outputs.artifact-name}}
+      gcp-version: production

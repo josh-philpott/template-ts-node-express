@@ -1,0 +1,14 @@
+---
+name: ⬆️ Release to Edge
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    uses: ./.github/workflows/build-and-deploy-app-engine.yml
+    with:
+      artifact-id: ${{ github.sha }}
+      gcp-version: edge
