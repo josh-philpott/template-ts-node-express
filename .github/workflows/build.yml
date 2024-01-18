@@ -1,14 +1,10 @@
 ---
-name: Build on Pull Request
+name: Test and Build
 on:
   pull_request:
 
-permissions:
-  id-token: write # This is required for requesting the JWT google-github-actions/auth@v2
-  contents: read # This is required for checking out the repository
-
 jobs:
-  build:
+  test-and-build:
     name: Build Node App
     runs-on: ubuntu-latest
     steps:
