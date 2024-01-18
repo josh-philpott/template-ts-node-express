@@ -35,10 +35,9 @@ jobs:
       - name: "📂 download build artifacts"
         uses: actions/download-artifact@v4
         with:
-          name: ${{ env.ARTIFACT_NAME }}
+          name: ${{needs.set-artifact-name.outputs.artifact-name}}
 
       - run: |
-          cd ${{ env.ARTIFACT_NAME }}
           ls -al
 
       - id: "auth"
@@ -50,6 +49,6 @@ jobs:
       - id: "deploy"
         uses: "google-github-actions/deploy-appengine@v2"
         with:
-          working_directory: ${{ env.ARTIFACT_NAME }}
+          working_directory: ${{needs.set-artifact-name.outputs.artifact-name}}
           deliverables: app.yaml
           project_id: ${{ vars.GCLOUD_PROJECT_ID }}
