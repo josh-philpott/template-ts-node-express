@@ -1,16 +1,14 @@
 ---
-name: Test and Build
+name: Lint, Test, Build
 on:
   pull_request:
 
 jobs:
-  test-and-build:
-    name: Build Node App
+  test:
+    name: Lint And Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: main
 
       - name: Use Node.js 20
         uses: actions/setup-node@v2
@@ -27,5 +25,23 @@ jobs:
       - name: prettier check
         run: npm run format:check
 
-      - name: build
+      - name: test
+        run: npm run test
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v2
+        with:
+          node-version: 20
+
+      - name: npm install
+        run: |
+          npm install
+
+      - name: Build
         run: npm run build --if-present
