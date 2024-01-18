@@ -3,9 +3,7 @@ name: Release
 
 on:
   push:
-    # tags: ["releases/[1-9]+.[0-9]+.[0-9]+"]
-    branches:
-      - main
+    tags: ["releases/[1-9]+.[0-9]+.[0-9]+"]
 
 permissions:
   id-token: write # This is required for requesting the JWT google-github-actions/auth@v2
@@ -15,7 +13,7 @@ jobs:
   build:
     uses: ./.github/workflows/build.yml
     with:
-      artifact-id: release-1.1.1
+      artifact-id: ${GITHUB_REF#refs/*/}
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
@@ -25,7 +23,7 @@ jobs:
       - name: "📂 download build artifacts"
         uses: actions/download-artifact@v4
         with:
-          name: release-1.1.1
+          name: ${GITHUB_REF#refs/*/}
 
       - id: "auth"
         uses: "google-github-actions/auth@v2"
