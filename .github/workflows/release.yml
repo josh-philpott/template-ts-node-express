@@ -11,10 +11,18 @@ permissions:
   contents: read # This is required for checking out the repository
 
 jobs:
-  build-and-push:
-    - id: "build"
-      uses: "$GITHUB_ACTIONS_REPOSITORY/.github/workflows/build.yml@main"
+  build:
+    uses: "$GITHUB_ACTIONS_REPOSITORY/.github/workflows/build.yml@main"
 
+  deploy:
+    needs:
+      - build
+    
+    - name: "📂 download build artifacts"
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+          path: build
     - id: "auth"
       uses: "google-github-actions/auth@v2"
       with:
