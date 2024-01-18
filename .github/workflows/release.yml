@@ -15,7 +15,8 @@ jobs:
     outputs:
       artifact-name: ${{ steps.step1.outputs.ARTIFACT_NAME }}
     steps:
-      - id: 🤔 Set Artifact Name
+      - name: 🤔 Set Artifact Name
+        id: set-artifact-name
         run: |
           TAG=${{ github.ref_name }} 
           echo "ARTIFACT_NAME=${TAG////-}" >> "$GITHUB_OUTPUT"
