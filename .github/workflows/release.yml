@@ -11,23 +11,25 @@ permissions:
 
 jobs:
   set-artifact-name:
+    name: 🤔 Set Artifact Name
     runs-on: ubuntu-latest
     outputs:
       artifact-name: ${{ steps.step1.outputs.ARTIFACT_NAME }}
     steps:
-      - name: 🤔 Set Artifact Name
+      - name: Set Artifact Name
         id: set-artifact-name
         run: |
           TAG=${{ github.ref_name }} 
           echo "ARTIFACT_NAME=${TAG////-}" >> "$GITHUB_OUTPUT"
   build:
+    name: 🏗️ Build
     needs:
       - set-artifact-name
     uses: ./.github/workflows/build.yml
     with:
       artifact-id: ${{needs.set-artifact-name.outputs.artifact-name}}
   deploy:
-    name: Deploy
+    name: ⬆️ Deploy
     runs-on: ubuntu-latest
     needs:
       - set-artifact-name
