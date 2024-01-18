@@ -38,6 +38,7 @@ jobs:
           name: ${{ env.ARTIFACT_NAME }}
 
       - run: |
+          cd ${{ env.ARTIFACT_NAME }}
           ls -al
 
       - id: "auth"
