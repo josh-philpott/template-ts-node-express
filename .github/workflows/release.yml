@@ -12,8 +12,36 @@ permissions:
 
 jobs:
   build:
-    uses: ./.github/workflows/build.yml
+    name: Build Node App
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
 
+      - name: Use Node.js 20
+        uses: actions/setup-node@v2
+        with:
+          node-version: 20
+
+      - name: npm install
+        run: |
+          npm install
+
+      - name: eslint
+        run: npm run lint
+
+      - name: prettier check
+        run: npm run format:check
+
+      - name: build
+        run: npm run build --if-present
+
+      - name: "📂 production artifacts"
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: .
   deploy:
     name: Deploy
     runs-on: ubuntu-latest

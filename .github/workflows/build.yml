@@ -1,9 +1,7 @@
 ---
-name: Build
+name: Build on Pull Request
 on:
-  push:
-    branches: [main]
-  workflow_call:
+  pull_request:
 
 permissions:
   id-token: write # This is required for requesting the JWT google-github-actions/auth@v2
@@ -35,9 +33,3 @@ jobs:
 
       - name: build
         run: npm run build --if-present
-
-      - name: "📂 production artifacts"
-        uses: actions/upload-artifact@v2
-        with:
-          name: build
-          path: .
