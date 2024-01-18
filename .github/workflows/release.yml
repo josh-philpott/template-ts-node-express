@@ -11,18 +11,28 @@ permissions:
   contents: read # This is required for checking out the repository
 
 jobs:
-  build-and-push:
-    - id: "build"
-      uses: "$GITHUB_ACTIONS_REPOSITORY/.github/workflows/build.yml@main"
+  build:
+    uses: "$GITHUB_ACTIONS_REPOSITORY/.github/workflows/build.yml@main"
 
-    - id: "auth"
-      uses: "google-github-actions/auth@v2"
-      with:
-        credentials_json: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY_JSON }}
-        service_account: ${{ vars.GCLOUD_SERVICE_ACCOUNT }}
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    steps:
+      - name: "📂 download build artifacts"
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+          path: build
+      - id: "auth"
+        uses: "google-github-actions/auth@v2"
+        with:
+          credentials_json: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY_JSON }}
+          service_account: ${{ vars.GCLOUD_SERVICE_ACCOUNT }}
 
-    - id: "deploy"
-      uses: "google-github-actions/deploy-appengine@v2"
-      with:
-        deliverables: app.yaml
-        project_id: ${{ vars.GCLOUD_PROJECT_ID }}
+      - id: "deploy"
+        uses: "google-github-actions/deploy-appengine@v2"
+        with:
+          deliverables: app.yaml
+          project_id: ${{ vars.GCLOUD_PROJECT_ID }}
