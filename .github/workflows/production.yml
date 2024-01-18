@@ -9,6 +9,13 @@ on:
       artifact-id:
         required: false
         type: string
+  workflow_dispatch:
+    inputs:
+      artifact-id:
+        description: "(Optional) The name of the artifact to use for the release"
+        required: false
+        type: string
+        default: ${{ github.sha }}
 
 permissions:
   id-token: write # This is required for requesting the JWT google-github-actions/auth@v2
