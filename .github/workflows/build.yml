@@ -1,5 +1,5 @@
 ---
-name: Lint, Test, Build
+name: 🏗️ Lint, Test, Build
 on:
   pull_request:
   workflow_call:
@@ -10,13 +10,13 @@ on:
 
 jobs:
   test:
-    name: Lint And Test
+    name: 🧪 Lint And Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Use Node.js 20
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: 20
 
@@ -34,7 +34,7 @@ jobs:
         run: npm run test
 
   build:
-    name: Build
+    name: 🏗️ Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -48,13 +48,13 @@ jobs:
         run: |
           npm install
 
-      - name: Build
+      - name: 🏗️ Build
         run: npm run build --if-present
 
-      - name: prune dev dependencies
+      - name: ✂️ prune dev dependencies
         run: npm prune --omit=dev
 
-      - name: "📂 production artifacts"
+      - name: 📂 build artifacts
         if: ${{ inputs.artifact-id != '' }}
         uses: actions/upload-artifact@v4
         with:
