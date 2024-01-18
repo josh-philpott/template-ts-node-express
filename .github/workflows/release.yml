@@ -64,10 +64,11 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY_JSON }}
           service_account: ${{ vars.GCLOUD_SERVICE_ACCOUNT }}
-
+      - run: |
+          ls -al
       - id: "deploy"
         uses: "google-github-actions/deploy-appengine@v2"
         with:
-          working_directory: ./release
+          working_directory: release
           deliverables: app.yaml
           project_id: ${{ vars.GCLOUD_PROJECT_ID }}
