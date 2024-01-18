@@ -10,6 +10,10 @@ on:
         required: false
         type: string
 
+permissions:
+  id-token: write # This is required for requesting the JWT google-github-actions/auth@v2
+  contents: read # This is required for checking out the repository
+
 jobs:
   set-artifact-name:
     name: 🤔 Set Artifact Name

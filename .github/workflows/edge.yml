@@ -6,6 +6,10 @@ on:
     branches:
       - main
 
+permissions:
+  id-token: write # This is required for requesting the JWT google-github-actions/auth@v2
+  contents: read # This is required for checking out the repository
+
 jobs:
   build-and-deploy:
     uses: ./.github/workflows/build-and-deploy-app-engine.yml
