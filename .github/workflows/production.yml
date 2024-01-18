@@ -32,4 +32,8 @@ jobs:
       - set-artifact-name
     with:
       artifact-id: ${{needs.set-artifact-name.outputs.artifact-name}}
-      gcp-version: production
+      gcp-project-id: ${{ vars.GCLOUD_PROJECT_ID }}
+      gcp-version: prod
+      gcp-service-account: ${{ vars.GCLOUD_SERVICE_ACCOUNT }}
+    secrets:
+      gcp-service-account-key-json: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY_JSON }}

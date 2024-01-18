@@ -7,7 +7,7 @@ on:
       - main
 
 permissions:
-  id-token: write # This is required for requesting the JWT google-github-actions/auth@v2
+  id-token: write # This is required for requesting the JWT google-github-actions/auth
   contents: read # This is required for checking out the repository
 
 jobs:
@@ -15,4 +15,8 @@ jobs:
     uses: ./.github/workflows/build-and-deploy-app-engine.yml
     with:
       artifact-id: ${{ github.sha }}
+      gcp-project-id: ${{ vars.GCLOUD_PROJECT_ID }}
       gcp-version: edge
+      gcp-service-account: ${{ vars.GCLOUD_SERVICE_ACCOUNT }}
+    secrets:
+      gcp-service-account-key-json: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY_JSON }}
