@@ -15,22 +15,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Use Node.js 20
+      - name: 🛠️ Use Node.js 20
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: npm install
+      - name: 🛒 Install Dependencies
         run: |
           npm install
 
-      - name: eslint
+      - name: ☑️ Check Linter
         run: npm run lint
 
-      - name: prettier check
+      - name: 💅 Check Format
         run: npm run format:check
 
-      - name: test
+      - name: 🧪 Test
         run: npm run test
 
   build:
@@ -39,12 +39,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Use Node.js 20
+      - name: 🛠️ Use Node.js 20
         uses: actions/setup-node@v2
         with:
           node-version: 20
 
-      - name: npm install
+      - name: 🛒 Install Dependencies
         run: |
           npm install
 

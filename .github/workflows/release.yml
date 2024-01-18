@@ -15,7 +15,7 @@ jobs:
     outputs:
       artifact-name: ${{ steps.step1.outputs.ARTIFACT_NAME }}
     steps:
-      - id: step1
+      - id: 🤔 Set Artifact Name
         run: |
           TAG=${{ github.ref_name }} 
           echo "ARTIFACT_NAME=${TAG////-}" >> "$GITHUB_OUTPUT"
@@ -32,23 +32,21 @@ jobs:
       - set-artifact-name
       - build
     steps:
-      - name: "📂 download build artifacts"
+      - name: 📂 Download Build Artifacts
         uses: actions/download-artifact@v4
         with:
           name: ${{needs.set-artifact-name.outputs.artifact-name}}
 
-      - run: |
-          ls -al
-
-      - id: "auth"
+      - name: 🛡️ Authenticate with Google Cloud
+        id: "auth"
         uses: "google-github-actions/auth@v2"
         with:
           credentials_json: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY_JSON }}
           service_account: ${{ vars.GCLOUD_SERVICE_ACCOUNT }}
 
-      - id: "deploy"
+      - name: ⬆️ Deploy to App Engine
+        id: "deploy"
         uses: "google-github-actions/deploy-appengine@v2"
         with:
-          working_directory: ${{needs.set-artifact-name.outputs.artifact-name}}
           deliverables: app.yaml
           project_id: ${{ vars.GCLOUD_PROJECT_ID }}
