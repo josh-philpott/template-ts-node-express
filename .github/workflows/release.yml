@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   build:
-    uses: ./github/workflows/build.yml
+    uses: ./.github/workflows/build.yml
     with:
       artifact-id: release-1.1.1
   deploy:
