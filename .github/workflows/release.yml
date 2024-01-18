@@ -43,7 +43,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build
-          path: release.zip
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
