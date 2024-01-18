@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   build:
-    name: Build Node App
+    name: Build And Publish Artfact
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -39,11 +39,14 @@ jobs:
       - name: prune dev dependencies
         run: npm prune --production
 
+      - name: Zip artifact for deployment
+        run: zip release.zip ./* -r
+
       - name: "📂 production artifacts"
         uses: actions/upload-artifact@v2
         with:
           name: build
-          path: .
+          path: release.zip
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
@@ -54,6 +57,11 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: build
+          path: release.zip
+
+      - name: unzip artifact for deployment
+        run: unzip release.zip
+
       - id: "auth"
         uses: "google-github-actions/auth@v2"
         with:
